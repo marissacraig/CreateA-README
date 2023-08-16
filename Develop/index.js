@@ -5,36 +5,55 @@ const fs = require('fs').promises;
 const licenses = [
 { 
     name: 'WTFPL Free Software License',
-    value: `[![License: WTFPL](https://img.shields.io/badge/License-WTFPL-brightgreen.svg)](http://www.wtfpl.net/about/)`
+    value: ` [![License: WTFPL](https://img.shields.io/badge/License-WTFPL-brightgreen.svg)](http://www.wtfpl.net/about/) `
 },
 { 
     name: 'PDDL Open Data Commons Public Domain Dedication',
-    value: `[![License: ODbL](https://img.shields.io/badge/License-PDDL-brightgreen.svg)](https://opendatacommons.org/licenses/pddl/)`
+    value: ` [![License: ODbL](https://img.shields.io/badge/License-PDDL-brightgreen.svg)](https://opendatacommons.org/licenses/pddl/) `
 },
 { 
     name: 'Hippocratic License 3.0 (HL3): An Ethical License for Open Source Communities',
-    value: `[![License: Hippocratic 3.0](https://img.shields.io/badge/License-Hippocratic_3.0-lightgrey.svg)](https://firstdonoharm.dev)`
+    value: ` [![License: Hippocratic 3.0](https://img.shields.io/badge/License-Hippocratic_3.0-lightgrey.svg)](https://firstdonoharm.dev) `
 },
 { 
     name: 'Mozilla Public License 2.0',
-    value: `[![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)`
+    value: ` [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0) `
 },
 {
     name: 'CC Attribution 4.0 International',
-    value: `[![License: CC BY 4.0](https://licensebuttons.net/l/by/4.0/80x15.png)](https://creativecommons.org/licenses/by/4.0/)`
+    value: ` [![License: CC BY 4.0](https://licensebuttons.net/l/by/4.0/80x15.png)](https://creativecommons.org/licenses/by/4.0/) `
 },
 {
     name: 'Attribution License by Open Data Commons',
-    value: `[![License: Open Data Commons Attribution](https://img.shields.io/badge/License-ODC_BY-brightgreen.svg)](https://opendatacommons.org/licenses/by/)`
+    value: ` [![License: Open Data Commons Attribution](https://img.shields.io/badge/License-ODC_BY-brightgreen.svg)](https://opendatacommons.org/licenses/by/) `
 },
 {
     name: 'Perl Artistic License 2.0',
-    value: `[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic_2.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)`
+    value: ` [![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic_2.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0) `
 },
 {
     name: 'SIL Open Font License 1.1',
-    value: `[![License: Open Font-1.1](https://img.shields.io/badge/License-OFL_1.1-lightgreen.svg)](https://opensource.org/licenses/OFL-1.1`
+    value: ` [![License: Open Font-1.1](https://img.shields.io/badge/License-OFL_1.1-lightgreen.svg)](https://opensource.org/licenses/OFL-1.1) `
 }
+];
+
+const tableOfContents = [
+    {
+        name: ' Usage ',
+        value: `* [Usage](#Usage)`
+    },
+    {
+        name: ' Licenses ',
+        value: `* [Licenses](#Licenses)`
+    },
+    {
+        name:  ' Contributions ',
+        value: `* [Contributions](#Contributions)`
+    },
+    {
+        name: ' Tests ',
+        value: `* [Tests](#tests)`
+    }
 ];
 // TODO: Create an array of questions for user input
 const questions = [
@@ -52,12 +71,7 @@ const questions = [
     type: 'checkbox',
     name: 'tableOfContents',
     message: 'Please select the sections you want to include in your Table of Contents.',
-    choices: [
-             ' Usage ',
-             ' Licenses ',
-             ' Contributions ',
-             ' Tests ' 
-            ],
+    choices: tableOfContents
 },
 {
     type: 'input',
@@ -125,14 +139,13 @@ function init() {
             const answerString = `
 # ${answers.title}
 
+${answers.licenses}
+
 ## Description
 ${answers.description}
 
 ## Table of Contents
-* ${answers.tableOfContents[0]}
-* ${answers.tableOfContents[1]}
-* ${answers.tableOfContents[2]}
-* ${answers.tableOfContents[3]}
+${answers.tableOfContents}
 
 ## Installation
 ${answers.installation}
@@ -143,18 +156,18 @@ ${answers.usage}
 ## Licenses
 ${answers.licenses}
 
-## Contributions
+## Contributions 
 ${answers.contributing}
 
-## Tests
+## Tests 
 ${answers.tests}
 
 ## Questions
+Links to my email, GitHub, and LinkedIn have been included for any questions regarding my app. 
 [![Gmail badge](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:${answers.email})
 [![github badge](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/${answers.github})
 [![linkedin badge](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/${answers.linkedin})   
 `
-        console.log(answerString)
         writeToFile('README.md', answerString)
     })
 };
