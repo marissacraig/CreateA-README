@@ -2,57 +2,44 @@
 const inquirer = require('inquirer');
 const fs = require('fs').promises;
 
-const licenses = [
-{ 
-    name: 'WTFPL Free Software License',
-    value: ` [![License: WTFPL](https://img.shields.io/badge/License-WTFPL-brightgreen.svg)](http://www.wtfpl.net/about/) `
-},
-{ 
-    name: 'PDDL Open Data Commons Public Domain Dedication',
-    value: ` [![License: ODbL](https://img.shields.io/badge/License-PDDL-brightgreen.svg)](https://opendatacommons.org/licenses/pddl/) `
-},
-{ 
-    name: 'Hippocratic License 3.0 (HL3): An Ethical License for Open Source Communities',
-    value: ` [![License: Hippocratic 3.0](https://img.shields.io/badge/License-Hippocratic_3.0-lightgrey.svg)](https://firstdonoharm.dev) `
-},
-{ 
-    name: 'Mozilla Public License 2.0',
-    value: ` [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0) `
-},
-{
-    name: 'CC Attribution 4.0 International',
-    value: ` [![License: CC BY 4.0](https://licensebuttons.net/l/by/4.0/80x15.png)](https://creativecommons.org/licenses/by/4.0/) `
-},
-{
-    name: 'Attribution License by Open Data Commons',
-    value: ` [![License: Open Data Commons Attribution](https://img.shields.io/badge/License-ODC_BY-brightgreen.svg)](https://opendatacommons.org/licenses/by/) `
-},
-{
-    name: 'Perl Artistic License 2.0',
-    value: ` [![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic_2.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0) `
-},
-{
-    name: 'SIL Open Font License 1.1',
-    value: ` [![License: Open Font-1.1](https://img.shields.io/badge/License-OFL_1.1-lightgreen.svg)](https://opensource.org/licenses/OFL-1.1) `
-}
-];
-
 const tableOfContents = [
     {
         name: ' Usage ',
-        value: `* [Usage](#Usage)`
+        value: ` * [Usage](#Usage)`
     },
     {
         name: ' Licenses ',
-        value: `* [Licenses](#Licenses)`
+        value: `\n * [Licenses](#Licenses)`
     },
     {
         name:  ' Contributions ',
-        value: `* [Contributions](#Contributions)`
+        value: `\n * [Contributions](#Contributions)`
     },
     {
         name: ' Tests ',
-        value: `* [Tests](#tests)`
+        value: `\n * [Tests](#tests) `
+    }
+];
+const licenses = [
+    {
+        name: 'MIT',
+        value: `MIT License: Open Source`
+    },
+    { 
+        name: 'APACHE 2.0',
+        value: `APACHE 2.0 License: Conditional Open Source`
+    },
+    { 
+        name: 'GPL 3.0',
+        value: `GPL 3.0 License: Gaurantees freedom to share and change all versions of a program`
+    },
+    { 
+        name: 'BSD 3',
+        value: `BSD 3 License: Conditional Open Source`
+    },
+    {
+        name: 'None',
+        value: `  `
     }
 ];
 // TODO: Create an array of questions for user input
@@ -84,9 +71,9 @@ const questions = [
     message: 'List any usage instructions you may have for a user.',
 },
 {
-    type: 'checkbox',
-    name: 'licenses',
-    message: 'Select any licenses your app is covered under.',
+    type: 'list',
+    name: 'license',
+    message: 'Select a license your app is covered under.',
     choices: licenses
 },
 {
@@ -136,10 +123,33 @@ function init() {
             .then((answers) => {
             console.log(answers)
             
+            function renderLicenseBadge() {
+                if (answers.license === 'MIT License: Open Source') {
+                    const MIT = `![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)`;
+                    return MIT;
+                }
+                else if (answers.license === 'APACHE 2.0 License: Conditional Open Source') {
+                    const APACHE = `![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)`;
+                    return APACHE;
+                }
+                else if (answers.license === 'GPL 3.0 License: Gaurantees freedom to share and change all versions of a program') {
+                    const GPL = `![License: BSD 3](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)`;
+                    return GPL;
+                }
+                else if (answers.license === 'BSD 3 License: Conditional Open Source') {
+                    const BSD = `![License: GPL 3.0](https://img.shields.io/badge/License-GPLv3-blue.svg)`;
+                    return BSD;
+                }
+                else if (answers.license === '  ') {
+                    const NONE = `  `;
+                    return NONE;
+                }
+                };
+            
             const answerString = `
 # ${answers.title}
 
-${answers.licenses}
+${renderLicenseBadge(answers.license)}   
 
 ## Description
 ${answers.description}
@@ -154,17 +164,18 @@ ${answers.installation}
 ${answers.usage}
 
 ## Licenses
-${answers.licenses}
+${answers.license}
 
 ## Contributions 
-${answers.contributing}
+${answers.contributions}
 
 ## Tests 
 ${answers.tests}
 
 ## Questions
 Links to my email, GitHub, and LinkedIn have been included for any questions regarding my app. 
-[![Gmail badge](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:${answers.email})
+
+<br> [![Gmail badge](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:${answers.email})
 [![github badge](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/${answers.github})
 [![linkedin badge](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/${answers.linkedin})   
 `
